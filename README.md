@@ -1,5 +1,7 @@
 # It Dojo
 
+## Best practices and React Render bottlenecks
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 # How to start
