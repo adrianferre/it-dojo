@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 
-const createRandomData = () => {
+const USERS_COUNT = 10000;
+
+const createRandomUser = () => {
   return {
     id: faker.string.uuid(),
     image: faker.image.avatar(),
@@ -16,6 +18,6 @@ const createRandomData = () => {
   };
 };
 
-const data = faker.helpers.multiple(createRandomData, {
-  count: 10,
+export const MOCK_USERS = faker.helpers.multiple(createRandomUser, {
+  count: USERS_COUNT,
 });
