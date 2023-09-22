@@ -15,7 +15,6 @@ import { memo } from "react";
 //   }
 
 export const UsersListItem = memo(({ user }) => {
-  console.log("Render UsersListItem", user.id);
   return (
     <div
       style={{

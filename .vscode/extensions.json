@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "bierner.markdown-preview-github-styles",
+    "esbenp.prettier-vscode",
+    "arcanis.vscode-zipfs",
+    "sysoev.vscode-open-in-github",
+    "eamodio.gitlens",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

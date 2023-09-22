@@ -5,7 +5,7 @@ const USERS_COUNT = 10000;
 const createRandomUser = () => {
   return {
     id: faker.string.uuid(),
-    image: faker.image.avatar(),
+    image: "https://avatars.githubusercontent.com/u/74114292", //faker.image.avatar(),
     userName: faker.internet.userName(),
     rating: faker.number.int({ min: 1, max: 10 }),
     phoneNumber: faker.phone.number(),
