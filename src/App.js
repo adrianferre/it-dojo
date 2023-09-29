@@ -1,7 +1,6 @@
 import { UsersPage } from "./pages/UsersPage";
 
 function App() {
-  console.log("App");
   return (
     <main
       style={{

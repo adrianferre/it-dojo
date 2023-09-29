@@ -3,8 +3,11 @@ import { MOCK_USERS } from "../mockUsers";
 
 import { UsersList } from "../components/UsersList";
 import { UserInput } from "../components/UserInput";
+import { UserDetail } from "../components/UserDetail";
 
-import { useDebounce } from "react-use";
+import { useDebounce, useAsync } from "react-use";
+
+import { getUsers } from "../apiClient";
 
 const stylesMain = {
   padding: 12,
@@ -12,7 +15,19 @@ const stylesMain = {
 
 export const UsersPage = memo(() => {
   const [text, setText] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState(MOCK_USERS);
+  const [userDetail, setUserDetail] = useState(null);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const { loading, value, error } = useAsync(async () => {
+    const users = await getUsers();
+
+    return users.map(({ _id, data }) => ({
+      _id,
+      ...data,
+    }));
+  }, []);
+
+  console.log("state", loading, value, error);
 
   // const filteredUsers = useMemo(
   //   () => MOCK_USERS.filter(({ userName }) => userName.includes(text)),
@@ -27,13 +42,14 @@ export const UsersPage = memo(() => {
 
   useDebounce(
     () => {
-      console.log("Filter by text", text);
       setFilteredUsers(
-        MOCK_USERS.filter(({ userName }) => userName.includes(text))
+        value?.filter(({ userName }) =>
+          userName.toUpperCase().includes(text.toUpperCase())
+        ) ?? []
       );
     },
     300,
-    [text]
+    [value, text]
   );
 
   console.log("UsersPage", text);
@@ -42,11 +58,28 @@ export const UsersPage = memo(() => {
     setText(text);
   }, []);
 
+  const handleUserDetailOpen = useCallback((user) => {
+    console.log("user", user);
+    setUserDetail(user);
+  }, []);
+
   return (
     <main style={stylesMain}>
       <h2>Users</h2>
-      <UserInput text={text} onTextChange={handleTextChange} />
-      <UsersList users={filteredUsers} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error...CTA</p>
+      ) : (
+        <>
+          <UserInput text={text} onTextChange={handleTextChange} />
+          <UsersList
+            users={filteredUsers}
+            onUserDetailOpen={handleUserDetailOpen}
+          />
+          {userDetail ? <UserDetail user={userDetail} /> : null}
+        </>
+      )}
     </main>
   );
 });

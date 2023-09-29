@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { UsersListItem } from "./UserListItem";
 
-export const UsersList = memo(({ users }) => {
+export const UsersList = memo(({ users, onUserDetailOpen }) => {
   console.log("Render UsersList");
   return (
     <div
@@ -12,7 +12,11 @@ export const UsersList = memo(({ users }) => {
       }}
     >
       {users.map((user) => (
-        <UsersListItem key={user.id} user={user} />
+        <UsersListItem
+          key={user.id}
+          user={user}
+          onUserDetailOpen={onUserDetailOpen}
+        />
       ))}
     </div>
   );

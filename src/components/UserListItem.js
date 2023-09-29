@@ -14,16 +14,19 @@ import { memo } from "react";
 //     "createdAt": "Mon Dec 18 2023 08:45:12 GMT-0300 (Argentina Standard Time)"
 //   }
 
-export const UsersListItem = memo(({ user }) => {
+export const UsersListItem = memo(({ user, onUserDetailOpen }) => {
   return (
     <div
+      className="user-item"
       style={{
         display: "flex",
         alignItems: "center",
         padding: 8,
         gap: 8,
         maxWidth: 500,
+        cursor: "pointer",
       }}
+      onClick={() => onUserDetailOpen(user)}
     >
       <img
         src={user.image}
