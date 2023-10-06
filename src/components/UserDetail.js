@@ -1,25 +1,41 @@
-import { memo, useState, useCallback } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
+import { updateUser } from "../apiClient";
+import { useUpdateEffect } from "react-use";
 
-export const UserDetail = memo(({ user }) => {
+export const UserDetail = memo(({ user, onUserDetailUpdate }) => {
   const [userDetail, setUserDetail] = useState({
     ...user,
   });
 
-  const handleNameChange = useCallback((name) => {
+  const handleUserReset = useCallback(
+    () =>
+      setUserDetail({
+        ...user,
+      }),
+    [user]
+  );
+
+  useUpdateEffect(() => {
+    handleUserReset();
+  }, [handleUserReset]);
+
+  const handleNameChange = useCallback((userName) => {
     setUserDetail((userDetail) => ({
       ...userDetail,
-      name: name,
+      userName: userName,
     }));
   }, []);
+
+  console.log("userDetail", userDetail);
 
   return (
     <div
       style={{
         display: "flex",
-        alignItems: "center",
         padding: 8,
         gap: 8,
         maxWidth: 500,
+        height: 50,
       }}
     >
       <img
@@ -31,7 +47,7 @@ export const UserDetail = memo(({ user }) => {
       />
       <div>
         <input
-          value={userDetail.name}
+          value={userDetail.userName}
           onChange={(event) => handleNameChange(event.target.value)}
         />
         <div
@@ -49,6 +65,8 @@ export const UserDetail = memo(({ user }) => {
       >
         {user.rating}
       </div>
+      <button onClick={() => onUserDetailUpdate(userDetail)}>Save</button>
+      <button onClick={handleUserReset}>Reset</button>
     </div>
   );
 });

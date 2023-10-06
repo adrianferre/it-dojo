@@ -5,9 +5,9 @@ import { UsersList } from "../components/UsersList";
 import { UserInput } from "../components/UserInput";
 import { UserDetail } from "../components/UserDetail";
 
-import { useDebounce, useAsync } from "react-use";
+import { useDebounce, useAsyncFn } from "react-use";
 
-import { getUsers } from "../apiClient";
+import { getUsers, updateUser } from "../apiClient";
 
 const stylesMain = {
   padding: 12,
@@ -18,7 +18,7 @@ export const UsersPage = memo(() => {
   const [userDetail, setUserDetail] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  const { loading, value, error } = useAsync(async () => {
+  const [{ loading, value, error }, doFetch] = useAsyncFn(async () => {
     const users = await getUsers();
 
     return users.map(({ _id, data }) => ({
@@ -26,6 +26,10 @@ export const UsersPage = memo(() => {
       ...data,
     }));
   }, []);
+
+  useEffect(() => {
+    doFetch();
+  }, [doFetch]);
 
   console.log("state", loading, value, error);
 
@@ -59,9 +63,18 @@ export const UsersPage = memo(() => {
   }, []);
 
   const handleUserDetailOpen = useCallback((user) => {
-    console.log("user", user);
+    console.log("User detail open", user);
     setUserDetail(user);
   }, []);
+
+  const handleUserDetailUpdate = useCallback(
+    async (user) => {
+      console.log("Update user", user);
+      await updateUser(user);
+      doFetch();
+    },
+    [doFetch]
+  );
 
   return (
     <main style={stylesMain}>
@@ -71,14 +84,25 @@ export const UsersPage = memo(() => {
       ) : error ? (
         <p>Error...CTA</p>
       ) : (
-        <>
-          <UserInput text={text} onTextChange={handleTextChange} />
-          <UsersList
-            users={filteredUsers}
-            onUserDetailOpen={handleUserDetailOpen}
-          />
-          {userDetail ? <UserDetail user={userDetail} /> : null}
-        </>
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <div>
+            <UserInput text={text} onTextChange={handleTextChange} />
+            <UsersList
+              users={filteredUsers}
+              onUserDetailOpen={handleUserDetailOpen}
+            />
+          </div>
+          {userDetail ? (
+            <UserDetail
+              user={userDetail}
+              onUserDetailUpdate={handleUserDetailUpdate}
+            />
+          ) : null}
+        </div>
       )}
     </main>
   );

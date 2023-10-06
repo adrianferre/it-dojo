@@ -17,6 +17,16 @@ export function createUser(user) {
     });
 }
 
+export async function updateUser(user) {
+  return instance
+    .put(`users/${user._id}`, {
+      data: user,
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
+}
+
 export async function getUsers() {
   return instance.get("users").then((res) => res.data);
 }
