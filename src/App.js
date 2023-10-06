@@ -1,6 +1,13 @@
 import { UsersPage } from "./pages/UsersPage";
+// This is to create the initial data every time the page API is reset
+// import { useEffect } from "react";
+// import { createUsersScript } from "./createUsersScript";
 
 function App() {
+  // useEffect(() => {
+  //   createUsersScript();
+  // }, []);
+
   return (
     <main
       style={{

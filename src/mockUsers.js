@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-const USERS_COUNT = 50;
+const USERS_COUNT = 15;
 
 const createRandomUser = () => {
   return {
